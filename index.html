@@ -43,10 +43,10 @@
 
   <h1>my-card</h1>
   <div class="card-wrapper">
-    <my-card></my-card>
+    <!-- <my-card></my-card>
     <my-card fancy card-title="Another card" buttonText="Click Me"
       imageLink="https://www.rd.com/wp-content/uploads/2019/09/GettyImages-621924830-scaled.jpg?w=2560"
-      buttonLink="https://hax.psu.edu/">Some random <strong>paragraph</strong> about info</my-card>
+      buttonLink="https://hax.psu.edu/">Some random <strong>paragraph</strong> about info</my-card> -->
     <!-- <my-card card-title="Numero Three" cardText="Lets gat that default image and a link to google lol"
       buttonText="Click Me" buttonLink="https://google.com/"></my-card>
     <my-card card-title="Exists?" cardText="Does google.edu exist? Hit the button" buttonText="To Find Out"
@@ -56,9 +56,15 @@
       buttonText="Bring me"
       imageLink="https://4.bp.blogspot.com/-XBHVmMlvP4w/VmsqEm1zkeI/AAAAAAABhzE/6vxIKM9hUH4/s1600/funny-animals-190-02.jpg"></my-card> -->
   </div>
+
+  <counter-app></counter-app>
+  <counter-app counter="17" min="0" max="25"></counter-app>
+
+
   <!-- this is what is bringing in the definition for this tag -->
   <script type="module" src="./src/polaris-chip.js"></script>
   <script type="module" src="./src/my-card.js"></script>
+  <script type="module" src="./src/counter-app.js"></script>
   <script>
     // Duplicate first card
     document.querySelector("#duplicate").addEventListener("click", function (event) {
