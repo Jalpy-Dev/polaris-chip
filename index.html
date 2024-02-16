@@ -25,38 +25,6 @@
 </head>
 
 <body>
-  <!--
-  <h1>polaris-chip</h1>
-  <polaris-chip title="News of Record" link="https://psu.edu/"></polaris-chip>
-  <polaris-chip title="Faculty and Staff"></polaris-chip>
-  <polaris-chip title="Sports are cool"></polaris-chip>
-  <polaris-chip title="Grants and donations"></polaris-chip>
-  -->
-  <h2>Controls</h2>
-  <div class="control-wrapper">
-    <button id="duplicate">Clone First Card</button>
-    <button id="change-title">Change Title</button>
-    <button id="change-image">Change Image</button>
-    <button id="bg-change">Change background</button>
-    <button id="delete-card">Delete Card</button>
-  </div>
-
-  <h1>my-card</h1>
-  <div class="card-wrapper">
-    <!-- <my-card></my-card>
-    <my-card fancy card-title="Another card" buttonText="Click Me"
-      imageLink="https://www.rd.com/wp-content/uploads/2019/09/GettyImages-621924830-scaled.jpg?w=2560"
-      buttonLink="https://hax.psu.edu/">Some random <strong>paragraph</strong> about info</my-card> -->
-    <!-- <my-card card-title="Numero Three" cardText="Lets gat that default image and a link to google lol"
-      buttonText="Click Me" buttonLink="https://google.com/"></my-card>
-    <my-card card-title="Exists?" cardText="Does google.edu exist? Hit the button" buttonText="To Find Out"
-      imageLink="https://s3.amazonaws.com/s3.timetoast.com/public/uploads/photos/12786918/edu.jpg"
-      buttonLink="https://google.edu/"></my-card>
-    <my-card card-title="Last One" cardText="Five is a lot of cards. This one has the default value for the link"
-      buttonText="Bring me"
-      imageLink="https://4.bp.blogspot.com/-XBHVmMlvP4w/VmsqEm1zkeI/AAAAAAABhzE/6vxIKM9hUH4/s1600/funny-animals-190-02.jpg"></my-card> -->
-  </div>
-
   <counter-app></counter-app>
   <counter-app counter="17" min="0" max="25"></counter-app>
 
@@ -65,55 +33,6 @@
   <script type="module" src="./src/polaris-chip.js"></script>
   <script type="module" src="./src/my-card.js"></script>
   <script type="module" src="./src/counter-app.js"></script>
-  <script>
-    // Duplicate first card
-    document.querySelector("#duplicate").addEventListener("click", function (event) {
-      const newCard = document.querySelector("my-card").cloneNode(true);
-
-      // Ensure that when we ADD cards that we never add more than 10
-      if (document.querySelectorAll("my-card").length < 10) {
-        document.querySelector(".card-wrapper").appendChild(newCard);
-      }
-    });
-
-    // Change title
-    document.querySelector("#change-title").addEventListener("click", function (e) {
-      const myCard = document.querySelector("my-card");
-      myCard.title = "Whats up";
-    });
-
-    // Change card image
-    document.querySelector("#change-image").addEventListener("click", function (e) {
-      const myCard = document.querySelector("my-card");
-      myCard.imageLink = "https://github.com/vr.png";
-    });
-
-    // Change background color
-    document.querySelector("#bg-change").addEventListener("click", function (e) {
-      const myCards = document.querySelectorAll('my-card');
-
-
-      myCards.forEach(myCard => {
-        // Accessing shadow DOM
-        const shadowRoot = myCard.shadowRoot;
-        // Selecting all '.card' elements inside shadow DOM
-        const cards = shadowRoot.querySelectorAll('.card');
-
-        cards.forEach(card => {
-          card.classList.toggle('change-color');
-        });
-      });
-    });
-
-    // Delete last card
-    document.querySelector("#delete-card").addEventListener("click", function (e) {
-      if (document.querySelectorAll("my-card").length !== 1) {
-        let lastCardIndex = document.querySelectorAll("my-card").length - 1;
-        document.querySelectorAll("")[lastCardIndex].remove();
-      }
-    });
-
-  </script>
 </body>
 
 </html>
