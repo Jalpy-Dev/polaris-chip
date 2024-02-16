@@ -11,7 +11,7 @@ export class CounterApp extends LitElement {
         this.counter = 10;
         this.min = 0;
         this.max = 20;
-        this.hitExtreme = "";
+        this.hitExtreme = false;
     }
 
     static get styles() {
@@ -83,15 +83,24 @@ export class CounterApp extends LitElement {
         }
     }
 
+    checkExtreme() {
+        if (this.counter == this.min || this.counter == this.max) {
+            this.hitExtreme = true;
+        } else {
+            this.hitExtreme = false;
+        }
+    }
+
 
 
     render() {
+        this.checkExtreme();
         return html`
             <div class="counter">
-                <h1 class="current-count ${this.hitExtreme ? css`hit-extreme` : css"}>${this.counter}</h1>
-            < div class="buttons" >
-                <button @click="${this.decrease}" > -1</button >
-                    <button @click="${this.increase}" > +1</button >
+                <h1 class="current-count ${this.hitExtreme ? css`hit-extreme` : css}">${this.counter}</h1>
+            <div class="buttons">
+                <button @click="${this.decrease}">-1</button >
+                    <button @click="${this.increase}">+1</button >
                 </div >
             </div >
             `;
@@ -102,6 +111,7 @@ export class CounterApp extends LitElement {
             counter: { type: Number, reflect: true, attribute: "counter" },
             min: { type: String, reflect: true, attribute: "min" },
             max: { type: String, reflect: true, attribute: "max" },
+            hitExtreme: { type: Boolean, reflect: true, attribute: "hit-extreme" }
         };
     }
 }
