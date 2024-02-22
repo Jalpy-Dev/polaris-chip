@@ -128,8 +128,8 @@ export class CounterApp extends LitElement {
                 <div class="counter">
                     <h1 class="current-count ${this.hitExtreme ? css`hit-extreme` : css}">${this.counter}</h1>
                 <div class="buttons">
-                    <button ?disabled="${this.min === this.counter}" @click="${this.decrease}">-1</button >
-                        <button ?disabled="${this.max === this.counter}" @click="${this.increase}">+1</button >
+                    <button ?disabled="${this.min == this.counter}" @click="${this.decrease}">-1</button >
+                        <button ?disabled="${this.max == this.counter}" @click="${this.increase}">+1</button >
                     </div >
                 </div >
             </confetti-container>
