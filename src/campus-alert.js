@@ -10,28 +10,72 @@ export class CampusAlert extends LitElement {
         super();
         this.alertType = "status";
         this.message = "Default alert message";
-        this.alertClosed = false;
         this.title = "Default Title";
         this.date = "January 1, 2024";
-        this.time = "12:01 AM"
-    }
+        this.time = "12:01 AM";
+        this.sticky = false;
 
+        if (localStorage.getItem("campus-alert-closed") == 'true') {
+            this.alertClosed = true;
+        } else {
+            this.alertClosed = false;
+        }
+    }
     static get styles() {
         return css`
             :host {
-                /* display: flex; */
-                width: 100%;
                 
             }
 
-            .status {
+            :host([alert-type="notice"]) .open-alert, :host([alert-type="notice"]) .alert-collapsed {
+                --shape-bg-color: white;
+                --outside-bg-color: #d0eceb;
+                --alert-text-color: black;
+            }
+
+            :host([alert-type="warning"]) .open-alert, :host([alert-type="warning"]) .alert-collapsed {
+                --shape-bg-color: #ffd100;
+                --outside-bg-color: #bf8226;
+                --alert-text-color: black;
+            }
+
+            :host([alert-type="alert"]) .open-alert, :host([alert-type="alert"]) .alert-collapsed {
+                --shape-bg-color: crimson;
+                --outside-bg-color: white;
+                --alert-text-color: white;
+            }
+
+            .open-alert {
                 padding: 4%;
                 display: inline-flex;
                 align-items: center;
                 justify-content: space-between;
-                width: 92%;
-                background-color: #d0eceb;
+                width: 100%;
                 font-weight: bolder;
+                height: 150px;
+                background-color: var(--outside-bg-color);
+                margin: 0;
+                padding: 0;
+            }
+
+            @media screen and (max-width: 900px) {
+                .open-alert {
+                    padding: 4%;
+                    display: flex;
+                    align-items: center;
+                    flex-direction: column;
+                    justify-content: space-between;
+                    width: 100%;
+                    font-weight: bolder;
+                    height: 200px;
+                    background-color: var(--outside-bg-color);
+                    margin: 0;
+                    padding: 0;
+                }
+            }
+
+            .date-time {
+                padding-left: 1%;
             }
 
             .alert-collapsed {
@@ -40,10 +84,10 @@ export class CampusAlert extends LitElement {
                 align-items: center;
                 justify-content: center;
                 width: 97%;
-                background-color: #d0eceb;
                 font-weight: bolder;
                 height: 30px;
                 padding: 15px;
+                background-color: var(--outside-bg-color);
             }
 
             .alert-collapsed .expand-arrow {
@@ -67,17 +111,17 @@ export class CampusAlert extends LitElement {
             }
 
             .alert-icon {
-                height: 60px;
+                height: 25%;
                 border: 5px solid black;
                 border-radius: 50%;
                 margin-right: 5%;
             }
 
             .alert-text {
-                height: 200px;
+                height: 100%;
                 width: 60%;
                 position: relative;
-                color: black;
+                color: var(--alert-text-color);
                 display: flex;
                 align-items: center;
             }
@@ -94,7 +138,7 @@ export class CampusAlert extends LitElement {
             }
 
             .triangle {
-                border-color: transparent transparent white;
+                border-color: transparent transparent var(--shape-bg-color);
                 bottom: 50px;
                 left: -15px;
                 position: absolute;
@@ -103,16 +147,19 @@ export class CampusAlert extends LitElement {
             }
 
             .alert-text .polygon {
-                background-color: white;
+                background-color: var(--shape-bg-color);
                 position: absolute;
                 top: 0px;
-                /* right: 20px; */
-                /* bottom: 0; */
-                /* left: -100; */
                 transform: skew(21deg,0);
                 left: 0px;
                 width: 105%;
-                height: 200px;
+                height: 100%;
+            }
+
+            @media screen and (max-width: 900px) {
+                .alert-text .polygon {
+                    background-color: var(--shape-bg-color);
+                }
             }
 
             button.toggle-alert {
@@ -120,10 +167,16 @@ export class CampusAlert extends LitElement {
                 font-size: 20px;
                 border-style: none;
                 background-color: transparent;
+                padding-right: 1%;
             }
 
             .hide-alert {
                 display: none;
+            }
+
+            .sticky-alert {
+                position: sticky;
+                top: 0;
             }
         `;
     }
@@ -131,14 +184,16 @@ export class CampusAlert extends LitElement {
     toggleAlert() {
         if (this.alertClosed) {
             this.alertClosed = false;
+            localStorage.removeItem("campus-alert-closed");
         } else {
             this.alertClosed = true;
+            localStorage.setItem("campus-alert-closed", true);
         }
     }
 
     render() {
         return html`
-        <div class="status ${this.alertClosed ? css`hide-alert` : css}">
+        <div class="open-alert ${this.alertClosed ? `hide-alert` : ``} ${this.sticky ? css`sticky-alert` : css}">
             <div class="date-time">
                 <p>${this.date}</p>
                 <p>${this.time}</p>
@@ -157,7 +212,7 @@ export class CampusAlert extends LitElement {
             <button class="toggle-alert" @click="${this.toggleAlert}">X <b>Close</b></button>
         </div>
 
-        <div class="alert-collapsed ${this.alertClosed ? css : css`hide-alert`}">
+        <div class="alert-collapsed ${this.alertClosed ? `` : `hide-alert`} ${this.sticky ? css`sticky-alert` : css}">
             <svg class="alert-icon" viewBox="0 0 82 82">
                 <g fill="#000321" data-name="Group 3036">
                     <path d="M35.232 54.188h10.381v7.786H35.232z" data-name="Rectangle 3589"></path>
@@ -177,7 +232,8 @@ export class CampusAlert extends LitElement {
             message: { type: String },
             date: { type: String },
             time: { type: String },
-            alertClosed: { type: Boolean, reflect: true }
+            alertClosed: { type: Boolean, reflect: true },
+            sticky: { type: Boolean, reflect: true }
         };
     }
 }
