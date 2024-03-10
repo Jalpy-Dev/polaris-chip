@@ -30,18 +30,21 @@ export class CampusAlert extends LitElement {
             :host([alert-type="notice"]) .open-alert, :host([alert-type="notice"]) .alert-collapsed {
                 --shape-bg-color: white;
                 --outside-bg-color: #d0eceb;
+                --collapsed-bg-color: #d0eceb;
                 --alert-text-color: black;
             }
 
             :host([alert-type="warning"]) .open-alert, :host([alert-type="warning"]) .alert-collapsed {
                 --shape-bg-color: #ffd100;
                 --outside-bg-color: #bf8226;
+                --collapsed-bg-color: #bf8226;
                 --alert-text-color: black;
             }
 
             :host([alert-type="alert"]) .open-alert, :host([alert-type="alert"]) .alert-collapsed {
                 --shape-bg-color: crimson;
                 --outside-bg-color: white;
+                --collapsed-bg-color: crimson;
                 --alert-text-color: white;
             }
 
@@ -58,22 +61,6 @@ export class CampusAlert extends LitElement {
                 padding: 0;
             }
 
-            @media screen and (max-width: 900px) {
-                .open-alert {
-                    padding: 4%;
-                    display: flex;
-                    align-items: center;
-                    flex-direction: column;
-                    justify-content: space-between;
-                    width: 100%;
-                    font-weight: bolder;
-                    height: 200px;
-                    background-color: var(--outside-bg-color);
-                    margin: 0;
-                    padding: 0;
-                }
-            }
-
             .date-time {
                 padding-left: 1%;
             }
@@ -83,11 +70,11 @@ export class CampusAlert extends LitElement {
                 display: inline-flex;
                 align-items: center;
                 justify-content: center;
-                width: 97%;
+                width: 100%;
                 font-weight: bolder;
                 height: 30px;
                 padding: 15px;
-                background-color: var(--outside-bg-color);
+                background-color: var(--collapsed-bg-color);
             }
 
             .alert-collapsed .expand-arrow {
@@ -168,6 +155,37 @@ export class CampusAlert extends LitElement {
                 border-style: none;
                 background-color: transparent;
                 padding-right: 1%;
+            }
+
+            @media screen and (max-width: 900px) {
+                :host([alert-type="alert"]) .open-alert, :host([alert-type="alert"]) .alert-collapsed {
+                --shape-bg-color: crimson;
+                --outside-bg-color: white;
+                --collapsed-bg-color: crimson;
+                --alert-text-color: black;
+            }
+
+                .open-alert {
+                    padding: 4%;
+                    display: flex;
+                    align-items: center;
+                    flex-direction: inline;
+                    justify-content: space-between;
+                    width: 100%;
+                    font-weight: bolder;
+                    height: 200px;
+                    background-color: var(--outside-bg-color);
+                    margin: 0;
+                    padding: 0;
+                }
+
+                .alert-text .polygon {
+                    display: none;
+                }
+
+                .alert-text .triangle {
+                    display: none;
+                }
             }
 
             .hide-alert {
