@@ -23,9 +23,9 @@ export class CampusAlert extends LitElement {
     }
     static get styles() {
         return css`
-            :host {
+            /* :host {
                 
-            }
+            } */
 
             :host([alert-type="notice"]) .open-alert, :host([alert-type="notice"]) .alert-collapsed {
                 --shape-bg-color: white;
