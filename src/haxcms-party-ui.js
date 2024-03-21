@@ -9,11 +9,8 @@ export class haxcmsPartyUI extends DDD {
 
     constructor() {
         super();
-        this.ownerName = "rudolphtherednosereindeer";
-        this.party1 = "";
-        this.party2 = "";
-        this.party3 = "";
-        this.party4 = "";
+        this.ownerName = "afg2837";
+        this.partyMembers = [];
     }
 
   static get styles() {
@@ -27,6 +24,7 @@ export class haxcmsPartyUI extends DDD {
       .frame {
         padding: var(-ddd-spacing-5);
         margin: var(--ddd-spacing-2) var(--ddd-spacing-0);
+        text-align: center;
         /* color: var(--ddd-theme-default-keystoneYellow); */
       }
 
@@ -37,26 +35,45 @@ export class haxcmsPartyUI extends DDD {
 
       .party-members {
         display: inline-flex;
+        overflow: scroll;
+        width: 90%;
+        height: 20%;
       }
 
       .slot {
         margin: var(--ddd-spacing-2);
+        display: flex;
+        flex-direction: column;
+        height: 100%;
       }
 
-      .hide-character {
-        visibility: hidden;
+      .slot p {
+        margin: 0;
+        padding: 0;
+        color: var(--ddd-theme-default-beaverBlue);
+      }
+
+      .slot .delete-user {
+        width: 2em;
+        position: relative;
+        left: 80%;
+        top: 10%;
       }
     `];
   }
 
-    isAdded(partyMember) {
-        if (partyMember != "") {
-            return true;
-        }
-        else {
-            return false;
-        }
-    }
+    addUser() {
+      const name = this.shadowRoot.querySelector('.input-text').value;
+
+      const user = {
+        userid: name,
+      }
+
+      // this.partyMembers.push(user);
+      // this.requestUpdate();
+      this.partyMembers = [...this.partyMembers, user];
+      console.log(this.partyMembers);
+  }
 
     render() {
         return html`
@@ -64,36 +81,22 @@ export class haxcmsPartyUI extends DDD {
                 <h1 class="frame-title">Add Party Member</h1>
 
                 <div class="add-to-party-input">
-                    <form>
-                        <label for="fname">@</label>
-                        <input type="text" id="username" name="username">
-                        <input type="submit" value="Add">
-                    </form>
+                  <input class="input-text" type="text" placeholder="abc123">
+                  <button @click="${this.addUser}">Add</button>
                 </div>
 
                 <div class="party-members">
                     <div class="slot">
-                        <rpg-character seed="${this.ownerName} walking"></rpg-character></div>
-                    <div class="slot">
-                        <div class="character-box ${this.isAdded(this.party1) ? `` : `hide-character`}">
-                            <rpg-character seed="${this.party1} walking"></rpg-character>
-                        </div>
+                        <rpg-character seed="${this.ownerName}" walking></rpg-character>
+                        <p>${this.ownerName}</p>
                     </div>
-                    <div class="slot">
-                        <div class="character-box ${this.isAdded(this.party2) ? `` : `hide-character`}">
-                            <rpg-character seed="${this.party2} walking"></rpg-character>
-                        </div>
-                    </div>
-                    <div class="slot">
-                        <div class="character-box ${this.isAdded(this.party3) ? `` : `hide-character`}">
-                            <rpg-character seed="${this.party3} walking"></rpg-character>
-                        </div>
-                    </div>
-                    <div class="slot">
-                        <div class="character-box ${this.isAdded(this.party4) ? `` : `hide-character`}">
-                            <rpg-character seed="${this.party4} walking"></rpg-character>
-                        </div>
-                    </div>
+                    ${this.partyMembers.map((user) => html`
+                      <div class="slot">
+                        <button class="delete-user">X</button>
+                        <rpg-character seed=${user.userid} walking @click="${this.targetClicked}"></rpg-character>
+                        <p>${user.userid}</p>
+                      </div>
+                  `)}
             </div>
         `;
     }
@@ -102,10 +105,7 @@ export class haxcmsPartyUI extends DDD {
     return {
       ...super.properties,
       ownerName: { type: String },
-      party1: { type: String, reflect: true },
-      party2: { type: String, reflect: true },
-      party3: { type: String, reflect: true },
-      party4: { type: String, reflect: true }
+      partyMembers: { type: Array }
     }
   }
 }
