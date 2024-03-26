@@ -64,12 +64,9 @@ export class haxcmsPartyUI extends DDD {
 
     addUser() {
       const inputValue = this.shadowRoot.querySelector('.input-text').value;
-      // Sanitize data (Stole this from class :D)
-      var sanitizedValue = inputValue.replace(/[^a-z0-9]/g, "");
-      sanitizedValue = sanitizedValue.slice(0, 20); // Limit to 20 characters
 
       const user = {
-        userid: name,
+        userid: inputValue,
       }
 
       this.partyMembers = [...this.partyMembers, user];
