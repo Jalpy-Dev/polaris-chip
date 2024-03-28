@@ -7,20 +7,6 @@ import { generateSW } from 'rollup-plugin-workbox';
 import path from 'path';
 import copy from 'rollup-plugin-copy';
 
- copy({
-      targets: [
-        {
-          src: 'node_modules/@lrnwebcomponents/rpg-character/lib',
-          dest: 'dist',
-        },
-        {
-          src: 'node_modules/@lrnwebcomponents/simple-icon/lib/svgs',
-          dest: 'dist',
-        },
-      ],
-    }),
-
-
 export default {
   input: 'index.html',
   output: {
@@ -33,6 +19,18 @@ export default {
   preserveEntrySignatures: false,
 
   plugins: [
+    copy({
+      targets: [
+        {
+          src: 'node_modules/@lrnwebcomponents/rpg-character/lib',
+          dest: 'dist',
+        },
+        {
+          src: 'node_modules/@lrnwebcomponents/simple-icon/lib/svgs',
+          dest: 'dist',
+        },
+      ],
+    }),
     /** Enable using HTML as rollup entrypoint */
     html({
       minify: true,
