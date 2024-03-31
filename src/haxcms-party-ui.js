@@ -115,7 +115,7 @@ export class haxcmsPartyUI extends DDD {
       const user = e.target.closest('button').getAttribute('seed');
 
       const index = this.partyMembers.indexOf(user);
-      this.partyMembers.splice(index)
+      this.partyMembers.splice(index, 1)
 
       this.requestUpdate();
     }
