@@ -9,7 +9,7 @@ export class haxcmsPartyUI extends DDD {
 
     constructor() {
         super();
-        this.ownerName = "afg2837";
+        this.ownerName = "you1234";
         this.partyMembers = [];
     }
 
@@ -23,35 +23,35 @@ export class haxcmsPartyUI extends DDD {
       }
 
       *, h1 {
-        font-family: "Press Start 2P", system-ui;
+        font-family: var(--frame-font-family, "Press Start 2P"), system-ui;
       }
       
       .frame {
-        padding: var(-ddd-spacing-5);
-        margin: var(--ddd-spacing-2) var(--ddd-spacing-0);
+        padding: var(--ddd-spacing-2);
         text-align: center;
         height: 100%;
-        padding: 1%;
-        /* color: var(--ddd-theme-default-keystoneYellow); */
+      }
+
+      .frame-title {
+        color: var(--ddd-theme-default-beaverBlue);
+      }
+
+      .add-to-party-input input, .add-to-party-input button {
+        height: var(--ddd-spacing-10);
       }
 
       .party-members {
         display: inline-flex;
         overflow-x: scroll;
         width: 90%;
-        height: 50%;
       }
 
       .slot {
         margin: var(--ddd-spacing-2);
         display: flex;
         flex-direction: column;
-        height: 75%;
         border-bottom: 2px solid black;
-        margin: 0;
-        margin-right: 5%;
-        padding: 0;
-        margin-top: 2%;
+        margin-right: var(--ddd-spacing-8);
       }
 
       .slot p {
@@ -64,28 +64,46 @@ export class haxcmsPartyUI extends DDD {
         width: 1rem;
         height: 1rem;
         border: 0;
+        padding: 2px;
         border-radius: 50%;
         background-color: var(--ddd-theme-default-discoveryCoral);
         color: white;
         font-size: 10px;
         font-weight: bolder;
         align-self: flex-end;
-        /* position: relative;
-        left: 4em;
-        top: 1em; */
+        text-align: center;
       }
 
-      .slot button:hover {
-        background-color: red;
+      .slot button:hover, .slot button:focus {
+        background-color: var(--slot-button-hover, red);
       }
 
       .save-cancel-buttons {
-        margin-top: 2%;
+        margin-top: var(--ddd-spacing-4);
+        height: var(--ddd-spacing-25);
+      }
+
+      .save-cancel-buttons button {
+        width: 20%;
+        height: 80%;
+        font-size: 15px;
+      }
+
+      button {
+        background-color: var(--ddd-theme-default-limestoneLight);
+        border: 2px solid black;
+        font-weight: bolder;
+      }
+
+      button:focus, button:hover {
+        background-color: var(--ddd-theme-default-limestoneGray);
+        transition: .4s;
       }
     `];
   }
 
     addUser() {
+      // Get current user text input
       const inputValue = this.shadowRoot.querySelector('.input-text').value;
 
       // Cleanup input and assign to new variable
@@ -100,23 +118,26 @@ export class haxcmsPartyUI extends DDD {
 
       // Check if user already exists
       if (this.partyMembers.indexOf(userid) != -1) {
+        // If it does exist, do nothing
         return;
       }
 
-      // If they dont exist, continue
+      // If they don't exist, add user to party
       this.partyMembers = [...this.partyMembers, userid];
       console.log(this.partyMembers);
     }
 
     targetClicked(e) {
-      // what item bubbled the event
-      console.log(e.target);
-
+      // Get clicked button's "seed" attribute (Deleted characters username)
       const user = e.target.closest('button').getAttribute('seed');
 
+      // Find index of username
       const index = this.partyMembers.indexOf(user);
+
+      // Delete username from party
       this.partyMembers.splice(index, 1)
 
+      // Refresh view
       this.requestUpdate();
     }
 
@@ -127,8 +148,9 @@ export class haxcmsPartyUI extends DDD {
     }
 
     save() {
-      // fireworks
+      // On save, make it rain
       this.makeItRain();
+      alert("Added " + this.partyMembers + " to your party!");
     }
 
     makeItRain() {
@@ -142,8 +164,11 @@ export class haxcmsPartyUI extends DDD {
     }
 
     inputScrub(e) {
+      // Get current user input
       const inputValue = e.target.value;
+      // regex cleanup
       const scrubValue = inputValue.replace(/[^a-zA-Z0-9]+$/g, "");
+      // update user input with scrubbed data
       e.target.value = scrubValue.slice(0, 10);
     }
 
@@ -174,7 +199,7 @@ export class haxcmsPartyUI extends DDD {
                   </div>
                   <div class="save-cancel-buttons">
                     <button @click="${this.save}">Save</button>
-                    <button @click="${this.cancel}">Cancel</button>
+                    <button @click="${this.cancel}">Erase</button>
                   </div>
                 </div>
               </confetti-container>
@@ -184,8 +209,8 @@ export class haxcmsPartyUI extends DDD {
   static get properties() {
     return {
       ...super.properties,
-      ownerName: { type: String },
-      partyMembers: { type: Array, reflect: true }
+      ownerName: { type: String, attribute: "owner-name" },
+      partyMembers: { type: Array, reflect: true, attribute: "party-members"}
     }
   }
 }
