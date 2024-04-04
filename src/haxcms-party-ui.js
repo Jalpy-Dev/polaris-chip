@@ -42,22 +42,26 @@ export class haxcmsPartyUI extends DDD {
 
       .party-members {
         display: inline-flex;
+        align-items: center;
         overflow-x: scroll;
         width: 90%;
       }
 
       .slot {
         margin: var(--ddd-spacing-2);
+        width: 140px;
         display: flex;
         flex-direction: column;
+        align-items: center;
         border-bottom: 2px solid black;
-        margin-right: var(--ddd-spacing-8);
+        margin-right: var(--ddd-spacing-5);
       }
 
       .slot p {
         margin: 0;
         color: var(--ddd-theme-default-beaverBlue);
-        font-size: 15px;
+        font-size: .7rem;
+        overflow: scale;
       }
 
       .slot button {
@@ -99,6 +103,11 @@ export class haxcmsPartyUI extends DDD {
         background-color: var(--ddd-theme-default-limestoneGray);
         transition: .4s;
       }
+
+      rpg-character {
+        width: 120px;
+        padding-bottom: 10px;
+      }
     `];
   }
 
@@ -118,24 +127,31 @@ export class haxcmsPartyUI extends DDD {
 
       // Check if user already exists
       if (this.partyMembers.indexOf(userid) != -1) {
-        // If it does exist, do nothing
+        // If it does exist, prompt user and reset input field
+        alert("User already in party");
+        this.shadowRoot.querySelector('.input-text').value = "";
         return;
       }
 
       // If they don't exist, add user to party
       this.partyMembers = [...this.partyMembers, userid];
-      console.log(this.partyMembers);
+
+      // Reset input field once added
+      this.shadowRoot.querySelector('.input-text').value = "";
     }
 
-    targetClicked(e) {
+    deleteUser(e) {
       // Get clicked button's "seed" attribute (Deleted characters username)
       const user = e.target.closest('button').getAttribute('seed');
 
       // Find index of username
       const index = this.partyMembers.indexOf(user);
 
-      // Delete username from party
-      this.partyMembers.splice(index, 1)
+      // Confirm we want to delete user
+      if (confirm("Delete " + user + " from your party?")) {
+        // Delete username from party
+        this.partyMembers.splice(index, 1)
+      }
 
       // Refresh view
       this.requestUpdate();
@@ -144,13 +160,20 @@ export class haxcmsPartyUI extends DDD {
     cancel() {
       // Do something eventually
       // But for now just reset party list to empty
-      this.partyMembers = [];
+      if (confirm("Are you sure you'd like to erase your party from existance?")) {
+        this.partyMembers = [];
+      }
     }
 
     save() {
-      // On save, make it rain
-      this.makeItRain();
-      alert("Added " + this.partyMembers + " to your party!");
+      // Check if party is empty
+      if (this.partyMembers.length == 0) {
+        alert("Your party is empty....")
+      } else {
+        this.makeItRain();
+        alert("Added " + this.partyMembers + " to your party!");
+        console.log(this.partyMembers);
+      }
     }
 
     makeItRain() {
@@ -172,6 +195,15 @@ export class haxcmsPartyUI extends DDD {
       e.target.value = scrubValue.slice(0, 10);
     }
 
+    checkEnter(e) {
+      const keypress = e.key;
+
+      if (keypress == "Enter") {
+        console.log(keypress);
+        this.addUser();
+      }
+    }
+
     render() {
         return html`
             <confetti-container id="confetti">
@@ -179,7 +211,7 @@ export class haxcmsPartyUI extends DDD {
                   <h1 class="frame-title">Add Party Member</h1>
 
                   <div class="add-to-party-input">
-                      <input class="input-text" type="text" placeholder="abc123" @input="${this.inputScrub}">
+                      <input class="input-text" type="text" placeholder="abc123" @input="${this.inputScrub}" @keypress="${this.checkEnter}">
                       <button type="submit" @click="${this.addUser}">Add</button>
                   </div>
 
@@ -191,8 +223,8 @@ export class haxcmsPartyUI extends DDD {
                       </div>
                       ${this.partyMembers.map((userid) => html`
                         <div class="slot">
-                          <button class="delete-user" @click="${this.targetClicked}" seed="${userid}">X</button>
-                          <rpg-character seed=${userid} @click="${this.targetClicked}"></rpg-character>
+                          <button class="delete-user" @click="${this.deleteUser}" seed="${userid}">X</button>
+                          <rpg-character seed=${userid} @click="${this.deleteUser}"></rpg-character>
                           <p>${userid}</p>
                         </div>
                     `)}
